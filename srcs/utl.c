@@ -6,11 +6,13 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:14:52 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/05 13:46:40 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/06 20:56:23 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+#include <stdlib.h>
 
 int				cmp(char *s1, char *s2, unsigned int o)
 {
@@ -40,18 +42,16 @@ char			**sort_insert(char **d, char *s, unsigned int o)
 	char	**ns;
 	int		l;
 
+	o = 0;
 	l = 0;
 	while (d[l])
 		l++;
-	if (!(ns = malloc(sizeof(char*) * (l + 1))))
+	if (!(ns = malloc(sizeof(char*) * (++l + 1))))
 		return (0);
-	ns[l] = '\0';
+	ns[l--] = 0;
+	ns[l] = s;
 	while (l--)
-		ns[l] = (s && !strcmp(s, d[l]) && !(s = 0)) ? s : d[l];
+		ns[l] = d[l];
+	free(d);
 	return (ns);
-}
-
-void			print_files()
-{
-
 }
