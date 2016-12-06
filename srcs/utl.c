@@ -5,30 +5,53 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/01 12:57:14 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/01 21:25:52 by tberthie         ###   ########.fr       */
+/*   Created: 2016/12/05 12:14:52 by tberthie          #+#    #+#             */
+/*   Updated: 2016/12/05 13:46:40 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "ft_ls.h"
 
-int			err_ret(char *s, int r)
+int				cmp(char *s1, char *s2, unsigned int o)
 {
-	perror(s);
-	return (r);
+	o = 0;
+	return (ft_strcmp(s1, s2) > 0) ? 1 : 0;
 }
 
-void		sort(char **d, unsigned int o, int s)
+void			sort(char **s, unsigned int o)
 {
-	char	*tmp;
 	int		i;
-	int		j;
+	char	*t;
 
-	i = 0;
-	while (i++ < s && (j = i))
-		while (j++ < s)
-			if (((o & R) && ft_strcmp(d[i - 1], d[j - 1]) < 0) &&
-			(tmp = d[i - 1]) && (d[i - 1] = d[j - 1]))
-				d[j - 1] = tmp;
+	while (*s && (i = 1))
+	{
+		while (s[i])
+		{
+			if (cmp(*s, s[i], o) && (t = *s) && (*s = s[i]))
+				s[i] = t;
+			i++;
+		}
+		s++;
+	}
+}
+
+char			**sort_insert(char **d, char *s, unsigned int o)
+{
+	char	**ns;
+	int		l;
+
+	l = 0;
+	while (d[l])
+		l++;
+	if (!(ns = malloc(sizeof(char*) * (l + 1))))
+		return (0);
+	ns[l] = '\0';
+	while (l--)
+		ns[l] = (s && !strcmp(s, d[l]) && !(s = 0)) ? s : d[l];
+	return (ns);
+}
+
+void			print_files()
+{
+
 }
