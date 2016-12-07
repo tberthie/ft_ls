@@ -1,4 +1,10 @@
-SRC=$(addsuffix .c,atoi freeret memalloc printf putchar putnbr putstr strchr strcmp strcpy strdup strjoin strlen)
+SRC=$(addsuffix .c,\
+	gnl printf\
+	atoi\
+	freeret freeswap memalloc\
+	putchar putnbr putstr\
+	strchr strcmp strncmp strcpy strdup strjoin strcjoin strpush strlen\
+	strtablen strtabpush strtabfree)
 OBJ=$(addprefix ft_,$(SRC:.c=.o))
 NAME=libft.a
 

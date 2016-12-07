@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_strtablen.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tfontani <tfontani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/04 15:32:38 by tfontani          #+#    #+#             */
-/*   Updated: 2016/12/04 15:32:38 by tfontani         ###   ########.fr       */
+/*   Created: 2016/12/06 12:21:09 by tfontani          #+#    #+#             */
+/*   Updated: 2016/12/06 12:50:42 by tfontani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-#include <stdlib.h>
-
-char	*ft_strdup(const char *str)
+unsigned int	ft_strtablen(char **tab)
 {
-	char			*dup;
+	char	**beg;
 
-	if (!(dup = (char*)malloc(sizeof(char) * (ft_strlen(str) + 1))))
-		return ((char*)0);
-	ft_strcpy(dup, str);
-	return (dup);
+	beg = tab;
+	while (*tab)
+		++tab;
+	return ((unsigned int)(tab - beg));
 }

@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 17:40:48 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/06 20:59:22 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/07 14:47:13 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@
 
 static int		parse(char *s, unsigned int *o)
 {
-	if (*s++ != '-')
+	if (*s != '-' || !*(s + 1))
 		return (0);
-	while ((*s == 'l' && (*o |= L)) || (*s == 'R' && (*o |= RR)) || (*s == 'a' &&
-	(*o |= A)) || (*s == 'r' && (*o |= R)) || (*s == 't' && (*o |= T)))
+	s++;
+	while ((*s == 'l' && (*o |= L)) || (*s == 'R' && (*o |= RR)) || (*s == 'a'
+	&& (*o |= A)) || (*s == 'r' && (*o |= R)) || (*s == 't' && (*o |= T)))
 		++s;
 	if (*s)
 	{
@@ -36,17 +37,25 @@ int				main(int ac, char **av)
 {
 	unsigned int	o;
 	int				i;
+	int				r;
 
 	++av;
 	i = 0;
 	while (*av && (i = parse(*av, &o)) && (av += 1) && (ac -= 1))
 		if (i == -1)
 			return (0);
-	(ac == 1) ? ft_ls(".", o) : sort(av, 0);
-	sort(av, o);
-	dfiles(av, o);
-	while (--ac)
-		if (*av++)
-			ft_ls(*(av - 1), o);
+	if (ac == 1)
+		ft_ls(".", o, 0);
+	else
+	{
+		r = setup(av, o, 0);
+		i = 0;
+		while (av[i])
+		{
+			ft_ls(av[i], o, (!r && !i && av[i + 1]) ? 2 :
+			(r || (i || av[i + 1])));
+			i++;
+		}
+	}
 	return (0);
 }

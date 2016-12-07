@@ -6,14 +6,14 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/04 16:07:47 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/06 20:45:38 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/07 15:20:40 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_LS_H
 # define FT_LS_H
 
-#include <sys/stat.h>
+# include <sys/stat.h>
 
 # define L	(1 << 0)
 # define RR	(1 << 1)
@@ -23,14 +23,17 @@
 
 typedef struct		s_s
 {
-	struct stat		*s;
+	struct stat		s;
 	char			*n;
 }					t_s;
 
-void				ft_ls(char *d, unsigned int o);
-void				dfiles(char **s, unsigned int o);
+void				ft_ls(char *d, unsigned int o, int r);
+int					setup(char **s, unsigned int o, int r);
+void				files(char **s, char *p, unsigned int o);
+void				display(t_s **s, unsigned int o);
 
 char				**sort_insert(char **d, char *s, unsigned int o);
 void				sort(char **s, unsigned int o);
+void				error(char *s);
 
 #endif

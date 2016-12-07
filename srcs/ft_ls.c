@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:16:20 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/06 21:00:41 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/07 15:25:48 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-t_s				**getstats(char **d)
+t_s				**getstats(char **d, char *p)
 {
 	t_s			**s;
 	t_s			*f;
@@ -31,49 +31,58 @@ t_s				**getstats(char **d)
 	l = 0;
 	while (*d)
 	{
-		if ((f = malloc(sizeof(t_s))) && !stat(*d, f->s))
-		{
-			f->n = *d;
+		if ((f = malloc(sizeof(t_s))) && !stat(ft_strjoin(p, *d), &f->s)
+		&& (f->n = *d))
 			s[l++] = f;
+		else
+		{
+			error(*d);
+			if (f)
+				free(f);
 		}
-		else if (f)
-			free(f);
 		d++;
 	}
 	s[l] = 0;
 	return (s);
 }
 
-void			dfiles(char **d, unsigned int o)
+void			files(char **d, char *p, unsigned int o)
 {
 	t_s			**s;
 
 	if (!(s = malloc(sizeof(t_s*)))
-	|| !(s = getstats(d)))
+	|| (*s = 0)
+	|| !(s = getstats(d, p)))
 		return ;
-	while (*s)
-	{
-		o = 0;		
-//		if dir > = 0:;
-		ft_printf("File %s\n", (*s)->n);
-		s++;
-	}
+	display(s, o);
 }
 
-void			ft_ls(char *p, unsigned int o)
+int				hidden(char *s, int o)
+{
+	if (*(s + 1) && ft_strcmp(s, "..") && (o & A))
+		return (0);
+	return (1);
+}
+
+void			ft_ls(char *p, unsigned int o, int r)
 {
 	DIR				*d;
 	char			**fs;
 	struct dirent	*f;
+	char			*np;
 
 	if (!(d = opendir(p)) ||
-	!(fs = malloc(sizeof(char*))))
+	!(fs = malloc(sizeof(char*))) ||
+	!(np = ft_strjoin(p, "/")))
 		return ;
-	ft_printf("%s:\n", p);
+	if (r)
+		ft_printf((r == 1 ? "\n%s:\n" : "%s:\n"), p);
 	*fs = 0;
 	while ((f = readdir(d)))
 		if (!(fs = sort_insert(fs, f->d_name, o)))
 			return ;
-	while (*fs)
-		ft_printf("%s\n", *fs++);
+	files(fs, np, o);
+	while ((o & RR) && *fs)
+		if (**fs++ != '.' || !hidden(*(fs - 1), o))
+			ft_ls(ft_strjoin(np, *(fs - 1)), o, 1);
 }

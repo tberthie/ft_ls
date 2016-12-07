@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_strcjoin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tfontani <tfontani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/04 15:32:38 by tfontani          #+#    #+#             */
-/*   Updated: 2016/12/04 15:32:38 by tfontani         ###   ########.fr       */
+/*   Created: 2016/12/07 12:59:51 by tfontani          #+#    #+#             */
+/*   Updated: 2016/12/07 13:00:58 by tfontani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,20 @@
 
 #include <stdlib.h>
 
-char	*ft_strdup(const char *str)
+char	*ft_strcjoin(const char *s1, const char *s2, char c)
 {
-	char			*dup;
+	char	*str;
+	char	*beg;
 
-	if (!(dup = (char*)malloc(sizeof(char) * (ft_strlen(str) + 1))))
+	if (!(str = (char*)malloc(sizeof(char)
+	* (ft_strlen(s1) + ft_strlen(s2) + 2))))
 		return ((char*)0);
-	ft_strcpy(dup, str);
-	return (dup);
+	beg = str;
+	while (*s1)
+		*str++ = *s1++;
+	*str++ = c;
+	while (*s2)
+		*str++ = *s2++;
+	*str = '\0';
+	return (beg);
 }
