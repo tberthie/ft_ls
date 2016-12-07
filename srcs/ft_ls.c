@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:16:20 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/07 15:25:48 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/07 16:51:58 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,9 @@ void			ft_ls(char *p, unsigned int o, int r)
 		ft_printf((r == 1 ? "\n%s:\n" : "%s:\n"), p);
 	*fs = 0;
 	while ((f = readdir(d)))
-		if (!(fs = sort_insert(fs, f->d_name, o)))
+		if (!(fs = insert(fs, ft_strdup(f->d_name), o)))
 			return ;
+	sort(fs, o);
 	files(fs, np, o);
 	while ((o & RR) && *fs)
 		if (**fs++ != '.' || !hidden(*(fs - 1), o))

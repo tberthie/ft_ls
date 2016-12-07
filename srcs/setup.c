@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/07 13:19:14 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/07 14:58:16 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/07 16:34:39 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ int			setup(char **s, unsigned int o, int r)
 	{
 		if (stat(s[i], &st) && (r = 1))
 			error(s[i]);
-		else if (S_ISDIR(st.st_mode))
+		else if (st.st_mode & S_IFDIR)
 			s[l++] = s[i];
 		else
-			f = sort_insert(f, s[i], o);
+			f = insert(f, s[i], o);
 		i++;
 	}
 	s[l] = 0;

@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:14:52 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/07 15:17:50 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/07 16:52:56 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,21 +49,30 @@ void			sort(char **s, unsigned int o)
 	}
 }
 
-char			**sort_insert(char **d, char *s, unsigned int o)
+char			**insert(char **d, char *s, unsigned int o)
 {
 	char	**ns;
 	int		l;
+	int		i;
 
 	l = 0;
 	while (d[l])
 		l++;
 	if (!(ns = malloc(sizeof(char*) * (++l + 1))))
 		return (0);
-	ns[l--] = 0;
-	ns[l] = s;
-	while (l--)
-		ns[l] = d[l];
-	sort(ns, o);
+	ns[l] = 0;
+	i = 0;
+	while (i < l)
+	{
+		if (s && (!d[i] || cmp(s, d[i], o)))
+		{
+			ns[i] = s;
+			s = 0;
+		}
+		else
+			ns[i] = d[i - !(s)];
+		i++;
+	}
 	free(d);
 	return (ns);
 }

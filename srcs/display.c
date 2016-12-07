@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/07 14:14:05 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/07 15:33:41 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/07 16:33:57 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void			filter(t_s **s, unsigned int o)
 	{
 		if (*s[i]->n == '.' && !(o & A) && (i += 1))
 			continue ;
-		if ((s[i]->s.st_mode & S_IFDIR) && (o & R) && (i += 1))
+		if (S_ISDIR(s[i]->s.st_mode) && (o & R) && (i += 1))
 			continue ;
 		s[l++] = s[i++];
 	}

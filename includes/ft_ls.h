@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/04 16:07:47 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/07 15:20:40 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/07 16:34:48 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int					setup(char **s, unsigned int o, int r);
 void				files(char **s, char *p, unsigned int o);
 void				display(t_s **s, unsigned int o);
 
-char				**sort_insert(char **d, char *s, unsigned int o);
+char				**insert(char **d, char *s, unsigned int o);
 void				sort(char **s, unsigned int o);
 void				error(char *s);
 
