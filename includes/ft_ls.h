@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/04 16:07:47 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/07 16:34:48 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/07 17:27:21 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct		s_s
 {
 	struct stat		s;
 	char			*n;
+	char			*p;
 }					t_s;
 
 void				ft_ls(char *d, unsigned int o, int r);

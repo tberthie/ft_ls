@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:16:20 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/07 16:51:58 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/07 18:30:09 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_s				**getstats(char **d, char *p)
 	l = 0;
 	while (*d)
 	{
-		if ((f = malloc(sizeof(t_s))) && !stat(ft_strjoin(p, *d), &f->s)
+		if ((f = malloc(sizeof(t_s))) && !lstat(ft_strjoin(p, *d), &f->s)
 		&& (f->n = *d))
 			s[l++] = f;
 		else
@@ -71,19 +71,23 @@ void			ft_ls(char *p, unsigned int o, int r)
 	struct dirent	*f;
 	char			*np;
 
-	if (!(d = opendir(p)) ||
-	!(fs = malloc(sizeof(char*))) ||
-	!(np = ft_strjoin(p, "/")))
+	if (!(d = opendir(p)))
 		return ;
+	if (!(fs = malloc(sizeof(char*))) ||
+	!(np = ft_strjoin(p, "/")))
+		return ((void)closedir(d));
 	if (r)
-		ft_printf((r == 1 ? "\n%s:\n" : "%s:\n"), p);
+		ft_printf((r == 2 ? "\n%s:\n" : "%s:\n"), p);
 	*fs = 0;
 	while ((f = readdir(d)))
 		if (!(fs = insert(fs, ft_strdup(f->d_name), o)))
-			return ;
+			return ((void)closedir(d));
 	sort(fs, o);
 	files(fs, np, o);
 	while ((o & RR) && *fs)
+	{
 		if (**fs++ != '.' || !hidden(*(fs - 1), o))
-			ft_ls(ft_strjoin(np, *(fs - 1)), o, 1);
+			ft_ls(ft_strjoin(np, *(fs - 1)), o, 2);
+	}
+	closedir(d);
 }

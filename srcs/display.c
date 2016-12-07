@@ -6,19 +6,19 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/07 14:14:05 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/07 16:33:57 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/07 17:50:13 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 #include "libft.h"
 
+#include <stdio.h>
+
 void			display_l(t_s **s, unsigned int o)
 {
-	while (*s++)
-	{
-		
-	}
+	while (*s)
+		ft_printf("%s\n", (*s++)->n);
 }
 
 void			filter(t_s **s, unsigned int o)
@@ -32,7 +32,7 @@ void			filter(t_s **s, unsigned int o)
 	{
 		if (*s[i]->n == '.' && !(o & A) && (i += 1))
 			continue ;
-		if (S_ISDIR(s[i]->s.st_mode) && (o & R) && (i += 1))
+		if (((S_ISDIR(s[i]->s.st_mode) || S_ISLNK(s[i]->s.st_mode)) && (o & RR)) && (i += 1))
 			continue ;
 		s[l++] = s[i++];
 	}

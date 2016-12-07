@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:14:52 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/07 16:52:56 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/07 17:25:51 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char			**insert(char **d, char *s, unsigned int o)
 	i = 0;
 	while (i < l)
 	{
-		if (s && (!d[i] || cmp(s, d[i], o)))
+		if (s && (!d[i] || !cmp(s, d[i], o)))
 		{
 			ns[i] = s;
 			s = 0;
