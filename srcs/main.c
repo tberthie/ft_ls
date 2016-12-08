@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 17:40:48 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/07 18:29:12 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/08 15:25:05 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "ft_ls.h"
 
 #include <unistd.h>
+#include <stdlib.h>
+#include <sys/stat.h>
 
 static int		parse(char *s, unsigned int *o)
 {
@@ -31,6 +33,32 @@ static int		parse(char *s, unsigned int *o)
 		return (-1);
 	}
 	return (1);
+}
+
+static int		setup(char **s, unsigned int o, int r)
+{
+	t_s				**f;
+	t_s				*st;
+	int				i;
+	int				l;
+
+	if (!(f = malloc(sizeof(t_s*))))
+		return (0);
+	*f = 0;
+	i = 0;
+	l = 0;
+	while (s[i])
+		if ((st = filestat(s[i++], ""))
+		|| !(r = 1))
+		{
+			if (S_ISDIR(st->s.st_mode) || (S_ISLNK(st->s.st_mode) && !(o & L)))
+				s[l++] = s[i - 1];
+			else
+				f = insert(f, st, o);
+		}
+	s[l] = 0;
+	display(f, o);
+	return (*f) ? 2 : r;
 }
 
 int				main(int ac, char **av)
@@ -52,7 +80,7 @@ int				main(int ac, char **av)
 		i = 0;
 		while (av[i])
 		{
-			ft_ls(av[i], o, i ? 2 : (r || (!i && av[i + 1])));
+			ft_ls(av[i], o, (r == 2) || i ? 2 : (r || (!i && av[i + 1])));
 			i++;
 		}
 	}

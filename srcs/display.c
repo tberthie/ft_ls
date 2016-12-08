@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/07 14:14:05 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/07 17:50:13 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/08 15:38:56 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,38 +17,21 @@
 
 void			display_l(t_s **s, unsigned int o)
 {
+	o = 0;
 	while (*s)
 		ft_printf("%s\n", (*s++)->n);
 }
 
-void			filter(t_s **s, unsigned int o)
-{
-	int		i;
-	int		l;
-
-	i = 0;
-	l = 0;
-	while (s[i])
-	{
-		if (*s[i]->n == '.' && !(o & A) && (i += 1))
-			continue ;
-		if (((S_ISDIR(s[i]->s.st_mode) || S_ISLNK(s[i]->s.st_mode)) && (o & RR)) && (i += 1))
-			continue ;
-		s[l++] = s[i++];
-	}
-	s[l] = 0;
-}
-
 void			display(t_s **s, unsigned int o)
 {
-	filter(s, o);
-	if (o & L)
-		display_l(s, o);
-	else
+	while (*s)
 	{
-		while (*s)
+		if ((*(*s)->n == '.' && !(o & A))
+		|| ((S_ISDIR((*s)->s.st_mode) && (o & RR))))
 		{
-			ft_printf("%s\n", (*s++)->n);
+			s++;
+			continue ;
 		}
+		ft_printf("%s\n", (*s++)->n);
 	}
 }

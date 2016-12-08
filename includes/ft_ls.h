@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/04 16:07:47 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/07 17:27:21 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/08 14:33:03 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,17 @@ typedef struct		s_s
 {
 	struct stat		s;
 	char			*n;
-	char			*p;
 }					t_s;
 
 void				ft_ls(char *d, unsigned int o, int r);
-int					setup(char **s, unsigned int o, int r);
-void				files(char **s, char *p, unsigned int o);
 void				display(t_s **s, unsigned int o);
 
-char				**insert(char **d, char *s, unsigned int o);
-void				sort(char **s, unsigned int o);
-void				error(char *s);
+int					cmp(t_s *s1, t_s *s2, unsigned int o);
+t_s					*filestat(char *n, char *p);
+t_s					**insert(t_s **d, t_s *s, unsigned int o);
+void				sort(t_s **s, unsigned int o);
+
+int					error_ret(char *s, int n);
+int					free_ret(void *p, int n);
 
 #endif
