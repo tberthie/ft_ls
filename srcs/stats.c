@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/08 12:52:32 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/08 16:13:22 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/09 17:28:25 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 
 int				cmp(t_s *s1, t_s *s2, unsigned int o)
 {
+	if ((o & T) && (o & R))
+		return (s1->s.st_mtime > s2->s.st_mtime ? 1 : 0);
+	if (o & T)
+		return (s1->s.st_mtime <= s2->s.st_mtime ? 1 : 0);
 	if (o & R)
 		return (ft_strcmp(s1->n, s2->n) <= 0) ? 1 : 0;
 	return (ft_strcmp(s1->n, s2->n) > 0) ? 1 : 0;

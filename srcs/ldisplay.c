@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/09 16:35:44 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/09 16:58:00 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/09 17:54:38 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static char		*get_time(t_s *s)
 	return (c);
 }
 
-int				max_width(t_s **s, int t)
+static int		max_width(t_s **s, int t)
 {
 	int		max;
 	int		nb;
@@ -47,12 +47,16 @@ int				max_width(t_s **s, int t)
 	while (*s)
 	{
 		tmp = 1;
-		nb = t == 0 ? (*s)->s.st_nlink : (*s)->s.st_size;
-		while (nb >= 10)
-		{
-			tmp++;
-			nb /= 10;
-		}
+		nb = !t ? (*s)->s.st_nlink : 0;
+		tmp = t == 1 ? ft_strlen(getpwuid((*s)->s.st_uid)->pw_name) : tmp;
+		tmp = t == 2 ? ft_strlen(getgrgid((*s)->s.st_gid)->gr_name) : tmp;
+		nb = t == 3 ? (*s)->s.st_size : nb;
+		if (!t || t == 3)
+			while (nb >= 10)
+			{
+				tmp++;
+				nb /= 10;
+			}
 		max = tmp > max ? tmp : max;
 		s++;
 	}
@@ -76,32 +80,31 @@ static char		type_char(mode_t t)
 	return ('-');
 }
 
-void			display_l(t_s **s, unsigned int o, char *p)
+void			display_l(t_s **s, char *p)
 {
 	mode_t		t;
 	int			i;
-	char		lnk[32];
+	char		lnk[64];
 	int			rd;
 
-	rd = 0;
+	if ((i = get_total(s)))
+		ft_printf("total %d\n", i);
 	i = 0;
-	ft_printf("total %d\n", get_total(s));
-	while (s[i])
+	while (s[i] && (t = s[i]->s.st_mode))
 	{
-		t = s[i]->s.st_mode;
-		ft_printf("%c%c%c%c%c%c%c%c%c%c  %*d %s  %s  %*d %s ",
+		ft_printf("%c%c%c%c%c%c%c%c%c%c  %*d %-*s  %-*s  %*d %s ",
 		type_char(t), t & S_IRUSR ? 'r' : '-', t & S_IWUSR ? 'w' : '-', t &
 		S_IXUSR ? 'x' : '-', t & S_IRGRP ? 'r' : '-', t & S_IWGRP ? 'w' : '-',
 		t & S_IXGRP ? 'x' : '-', t & S_IROTH ? 'r' : '-', t & S_IWOTH ? 'w' :
 		'-', t & S_IXOTH ? 'x' : '-', max_width(s, 0), s[i]->s.st_nlink,
-		getpwuid(s[i]->s.st_uid)->pw_name, getgrgid(s[i]->s.st_gid)->gr_name,
-		max_width(s, 1), s[i]->s.st_size, get_time(s[i]));
-		/*(o & G) ? */setcolor(s[i])/* : 0*/;
-		ft_printf("%s{eoc}", s[i]->n);
-		if (S_ISLNK(t) && (rd = readlink(ft_strjoin(p, s[i]->n), lnk, 31)) &&
+		max_width(s, 1), getpwuid(s[i]->s.st_uid)->pw_name, max_width(s, 2),
+		getgrgid(s[i]->s.st_gid)->gr_name, max_width(s, 3), s[i]->s.st_size,
+		get_time(s[i]));
+		setcolor(s[i]);
+		if (S_ISLNK(t) && (rd = readlink(ft_strjoin(p, s[i]->n), lnk, 63)) &&
 		!(lnk[rd] = 0))
-			ft_printf(" -> %s", lnk);
-		ft_putchar('\n');
-		i++;
+			ft_printf("%s -> %s{eoc}\n", s[i++]->n, lnk);
+		else
+			ft_printf("%s{eoc}\n", s[i++]->n);
 	}
 }
