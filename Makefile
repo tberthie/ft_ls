@@ -2,6 +2,7 @@ SRCS = main.c \
 	   ft_ls.c \
 	   utl.c \
 	   display.c \
+	   ldisplay.c \
 	   stats.c
 
 OBJS = $(addprefix srcs/,$(SRCS:.c=.o))

@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 17:40:48 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/08 15:25:05 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/09 16:38:41 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int		setup(char **s, unsigned int o, int r)
 	i = 0;
 	l = 0;
 	while (s[i])
-		if ((st = filestat(s[i++], ""))
+		if ((st = filestat(ft_strdup(s[i++]), ""))
 		|| !(r = 1))
 		{
 			if (S_ISDIR(st->s.st_mode) || (S_ISLNK(st->s.st_mode) && !(o & L)))
@@ -57,7 +57,7 @@ static int		setup(char **s, unsigned int o, int r)
 				f = insert(f, st, o);
 		}
 	s[l] = 0;
-	display(f, o);
+	display(f, o, "");
 	return (*f) ? 2 : r;
 }
 

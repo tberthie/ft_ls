@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:16:20 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/08 15:38:36 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/09 16:36:43 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,24 @@ void			recurs(t_s **f, char *p, unsigned int o)
 	}
 }
 
+t_s				**filter(t_s **d, unsigned int o)
+{
+	t_s		**f;
+
+	if (!(f = malloc(sizeof(t_s*))))
+		return (0);
+	*f = 0;
+	while (*d)
+	{
+		if (((*(*d)->n == '.' && !(o & A))
+		|| ((S_ISDIR((*d)->s.st_mode) && (o & RR)))) && (d += 1))
+			continue ;
+		if (!(f = insert(f, *d++, o)))
+			return (0);
+	}
+	return (f);
+}
+
 void			ft_ls(char *p, unsigned int o, int r)
 {
 	DIR				*d;
@@ -57,7 +75,8 @@ void			ft_ls(char *p, unsigned int o, int r)
 	while ((f = readdir(d)))
 		if (!(fs = insert(fs, filestat(ft_strdup(f->d_name), np), o)))
 			return ((void)closedir(d));
-	display(fs, o);
+	display(filter(fs, o), o, np);
 	recurs(fs, np, o);
+	free(np);
 	closedir(d);
 }

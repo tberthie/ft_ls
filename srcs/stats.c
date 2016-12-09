@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/08 12:52:32 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/08 15:33:04 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/08 16:13:22 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ t_s				*filestat(char *n, char *p)
 	char			*fulln;
 
 	if (!(fulln = ft_strjoin(p, n)))
+	{
+		free(n);
 		return (0);
+	}
 	if (!(f = malloc(sizeof(t_s))) || lstat(fulln, &(f->s)))
 	{
 		if (f)
@@ -37,6 +40,7 @@ t_s				*filestat(char *n, char *p)
 			error_ret(fulln, 0);
 			free(f);
 		}
+		free(n);
 		free(fulln);
 		return (0);
 	}

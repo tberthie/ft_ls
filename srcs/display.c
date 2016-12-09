@@ -6,32 +6,39 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/07 14:14:05 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/08 15:38:56 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/09 16:53:37 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_ls.h"
 #include "libft.h"
+#include "ft_ls.h"
 
-#include <stdio.h>
-
-void			display_l(t_s **s, unsigned int o)
+void			setcolor(t_s *s)
 {
-	o = 0;
-	while (*s)
-		ft_printf("%s\n", (*s++)->n);
+	if (S_ISDIR(s->s.st_mode))
+		ft_printf("{cyan}");
+	if (S_ISLNK(s->s.st_mode))
+		ft_printf("{magenta}");
 }
 
-void			display(t_s **s, unsigned int o)
+/*long			getdims(int size, int len)
 {
-	while (*s)
-	{
-		if ((*(*s)->n == '.' && !(o & A))
-		|| ((S_ISDIR((*s)->s.st_mode) && (o & RR))))
-		{
-			s++;
-			continue ;
-		}
-		ft_printf("%s\n", (*s++)->n);
-	}
+	struct winsize	ws;
+	int				width;
+
+	ioctl(STDIN_FILENO, TIOCGWINSZ, &ws);
+	width = ws.ws_col / (len + 1);
+	return (size / width + (size % width ? 1 : 0));
+}*/
+
+/*void			display_n(t_s **s, unsigned int o)
+{
+}*/
+
+void			display(t_s **s, unsigned int o, char *p)
+{
+//	if (o & L)
+		display_l(s, o, p);
+/*	else
+		display_n(s, o);*/
 }
