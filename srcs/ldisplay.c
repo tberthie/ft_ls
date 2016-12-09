@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/09 16:35:44 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/09 16:51:37 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/09 16:58:00 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void			display_l(t_s **s, unsigned int o, char *p)
 		ft_printf("%s{eoc}", s[i]->n);
 		if (S_ISLNK(t) && (rd = readlink(ft_strjoin(p, s[i]->n), lnk, 31)) &&
 		!(lnk[rd] = 0))
-			ft_printf(" -> %s", s[i], lnk);
+			ft_printf(" -> %s", lnk);
 		ft_putchar('\n');
 		i++;
 	}

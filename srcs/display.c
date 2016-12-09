@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/07 14:14:05 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/09 16:53:37 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/09 16:59:05 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@
 void			setcolor(t_s *s)
 {
 	if (S_ISDIR(s->s.st_mode))
-		ft_printf("{cyan}");
-	if (S_ISLNK(s->s.st_mode))
+		ft_printf("{green}");
+	else if (S_ISLNK(s->s.st_mode))
 		ft_printf("{magenta}");
+	else
+		ft_printf("{cyan}");
 }
 
 /*long			getdims(int size, int len)

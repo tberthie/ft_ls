@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:16:20 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/09 16:36:43 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/09 17:01:11 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ void			ft_ls(char *p, unsigned int o, int r)
 		return ((void)closedir(d));
 	}
 	if (r)
-		ft_printf((r == 2 ? "\n%s:\n" : "%s:\n"), p);
+		ft_printf((r == 2 ? "\n{green}%s:{eoc}\n" :
+		"{green}%s:{eoc}\n"), p);
 	while ((f = readdir(d)))
 		if (!(fs = insert(fs, filestat(ft_strdup(f->d_name), np), o)))
 			return ((void)closedir(d));
