@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:16:20 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/09 17:54:26 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/09 18:22:31 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,16 @@ int				hidden(char *s, int o)
 
 void			recurs(t_s **f, char *p, unsigned int o)
 {
+	char	*np;
+
 	while ((o & RR) && *f)
 	{
 		if ((*(*f)->n != '.' || !hidden((*f)->n, o))
 		&& S_ISDIR((*f)->s.st_mode))
-			ft_ls(ft_strjoin(p, (*f)->n), o, 2);
+		{
+			ft_ls((np = ft_strjoin(p, (*f)->n)), o, 2);
+			free(np);
+		}
 		f++;
 	}
 }

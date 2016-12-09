@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 17:40:48 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/09 16:38:41 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/09 18:33:49 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-static int		parse(char *s, unsigned int *o)
+static int		parse(char *s, t_ls *ls)
 {
 	if (*s != '-' || !*(s + 1))
 		return (0);
@@ -35,44 +35,21 @@ static int		parse(char *s, unsigned int *o)
 	return (1);
 }
 
-static int		setup(char **s, unsigned int o, int r)
-{
-	t_s				**f;
-	t_s				*st;
-	int				i;
-	int				l;
-
-	if (!(f = malloc(sizeof(t_s*))))
-		return (0);
-	*f = 0;
-	i = 0;
-	l = 0;
-	while (s[i])
-		if ((st = filestat(ft_strdup(s[i++]), ""))
-		|| !(r = 1))
-		{
-			if (S_ISDIR(st->s.st_mode) || (S_ISLNK(st->s.st_mode) && !(o & L)))
-				s[l++] = s[i - 1];
-			else
-				f = insert(f, st, o);
-		}
-	s[l] = 0;
-	display(f, o, "");
-	return (*f) ? 2 : r;
-}
-
 int				main(int ac, char **av)
 {
-	unsigned int	o;
+	t_ls			*ls;
 	int				i;
 	int				r;
 
-	++av;
-	i = 0;
-	while (*av && (i = parse(*av, &o)) && (av += 1) && (ac -= 1))
-		if (i == -1)
+	if (!(ls = malloc(sizeof(t_ls))) || (ls->o = 0) || (ls->max_len = 0))
+		return (0);
+	i = 1;
+	while (av[i] && (r = parse(av[i], ls)) && (i += 1) && (ac -= 1))
+		if (r == -1)
 			return (0);
-	if (ac == 1)
+
+
+	/*if (ac == 1)
 		ft_ls(".", o, 0);
 	else
 	{
@@ -83,6 +60,6 @@ int				main(int ac, char **av)
 			ft_ls(av[i], o, (r == 2) || i ? 2 : (r || (!i && av[i + 1])));
 			i++;
 		}
-	}
+	}*/
 	return (0);
 }

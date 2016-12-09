@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/08 12:52:32 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/09 17:28:25 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/09 18:13:21 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,11 @@ t_s				*filestat(char *n, char *p)
 	char			*fulln;
 
 	if (!(fulln = ft_strjoin(p, n)))
-	{
-		free(n);
-		return (0);
-	}
+		free_ret(n, 0);
 	if (!(f = malloc(sizeof(t_s))) || lstat(fulln, &(f->s)))
 	{
-		if (f)
-		{
-			error_ret(fulln, 0);
-			free(f);
-		}
+		f ? error_ret(fulln, 0) : 0;
+		f ? free(f) : 0;
 		free(n);
 		free(fulln);
 		return (0);
@@ -91,7 +85,7 @@ t_s				**insert(t_s **d, t_s *s, unsigned int o)
 		if (s && (!d[i] || !cmp(s, d[i], o)) && (ns[i] = s))
 			s = 0;
 		else
-			ns[i] = d[i - !(s)];
+			ns[i] = d[i - (!s)];
 		i++;
 	}
 	free(d);

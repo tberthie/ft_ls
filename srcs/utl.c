@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:14:52 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/08 15:25:13 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/09 18:09:37 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int				error_ret(char *s, int n)
 	return (n);
 }
 
-int				freeret_ret(void *p, int n)
+int				free_ret(void *p, int n)
 {
 	free(p);
 	return (n);

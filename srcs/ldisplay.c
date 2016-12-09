@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/09 16:35:44 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/09 17:54:38 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/09 18:05:03 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,8 @@ static char		*get_time(t_s *s)
 {
 	char		*c;
 
-	c = ((ft_strdup(ctime(&(s->s.st_mtime))) + 4));
-	c[12] = 0;
-	return (c);
+	(c = ft_strdup(ctime(&(s->s.st_mtime))))[16] = 0;
+	return (&c[4]);
 }
 
 static int		max_width(t_s **s, int t)
@@ -107,4 +106,5 @@ void			display_l(t_s **s, char *p)
 		else
 			ft_printf("%s{eoc}\n", s[i++]->n);
 	}
+	free(s);
 }

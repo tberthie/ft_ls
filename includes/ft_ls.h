@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/04 16:07:47 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/09 17:23:52 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/09 18:33:54 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,26 @@
 # define R	(1 << 3)
 # define T	(1 << 4)
 
-typedef struct		s_s
+typedef struct stat	t_s;
+
+typedef struct		s_ls
 {
-	struct stat		s;
-	char			*n;
-}					t_s;
+	int				o;
+	int				max_len;
+	t_fold			**d
+}					t_ls;
+
+typedef struct		s_fold
+{
+	char			*p;
+	char			**n;
+	t_s				**s;
+}					t_fold;
+
+
+
+
+
 
 void				ft_ls(char *d, unsigned int o, int r);
 void				display(t_s **s, unsigned int o, char *p);
