@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:16:20 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/09 18:22:31 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/10 21:43:38 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,72 +17,83 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-int				hidden(char *s, int o)
+void			freetab(t_file **files)
 {
-	if (*(s + 1) && ft_strcmp(s, "..") && (o & A))
-		return (0);
-	return (1);
+	int		i;
+
+	i = 0;
+	while (files[i])
+	{
+		free(files[i]->name);
+		free(files[i]->path);
+		free(files[i++]);
+	}
+	free(files);
 }
 
-void			recurs(t_s **f, char *p, unsigned int o)
+int				forbidden(char *n, unsigned int o)
 {
-	char	*np;
+	if (*n == '.' && (!(o & A) || (!*(n + 1) ||
+	(*(n + 1) == '.' && !*(n + 2)))))
+		return (1);
+	return (0);
+}
 
-	while ((o & RR) && *f)
+t_file			**parse(DIR *dir, char *p, unsigned int o, t_file **dirs,
+						t_file **files)
+{
+	t_file			*file;
+	struct dirent	*read;
+	char			*tmp;
+
+	while ((read = readdir(dir)))
 	{
-		if ((*(*f)->n != '.' || !hidden((*f)->n, o))
-		&& S_ISDIR((*f)->s.st_mode))
+		if ((tmp = ft_strjoin(p, "/")) &&
+		(file = getfile(tmp, read->d_name)))
 		{
-			ft_ls((np = ft_strjoin(p, (*f)->n)), o, 2);
-			free(np);
+			if (read->d_type == DT_DIR && (o & RR))
+			{
+				if (!forbidden(read->d_name, o) &&
+				!(dirs = insertfile(dirs, file, o)))
+					return (0);
+			}
+			else if ((*read->d_name != '.' || o & A) &&
+			!(files = insertfile(files, file, o)))
+				return (0);
 		}
-		f++;
+		if (tmp)
+			free(tmp);
 	}
+	output(files, p, o);
+	freetab(files);
+	return (dirs);
 }
 
-t_s				**filter(t_s **d, unsigned int o)
+void			ft_ls(t_file *d, unsigned int o, int r)
 {
-	t_s		**f;
+	DIR				*dir;
+	char			*tmp;
+	t_file			**files;
+	t_file			**dirs;
+	int				i;
 
-	if (!(f = malloc(sizeof(t_s*))))
-		return (0);
-	*f = 0;
-	while (*d)
-	{
-		if (((*(*d)->n == '.' && !(o & A))
-		|| ((S_ISDIR((*d)->s.st_mode) && (o & RR)))) && (d += 1))
-			continue ;
-		if (!(f = insert(f, *d++, o)))
-			return (0);
-	}
-	return (f);
-}
-
-void			ft_ls(char *p, unsigned int o, int r)
-{
-	DIR				*d;
-	t_s				**fs;
-	struct dirent	*f;
-	char			*np;
-
-	if (!(d = opendir(p)))
-		return ((void)error_ret(p, 0));
-	if (!(fs = malloc(sizeof(t_s*))))
-		return ((void)closedir(d));
-	*fs = 0;
-	if (!(np = ft_strjoin(p, "/")))
-	{
-		free(fs);
-		return ((void)closedir(d));
-	}
+	if (!(files = malloc(sizeof(t_file*))) ||
+	!(dirs = malloc(sizeof(t_file*))))
+		return ;
+	*files = 0;
+	*dirs = 0;
+	if (!(tmp = *(d->path) ? ft_strjoin(d->path, d->name) : d->name)
+	|| !(dir = opendir(tmp)))
+		return (tmp) ? (void)free_ret(tmp, 0) : (void)0;
 	if (r)
-		ft_printf((r == 2 ? "\n{green}%s:{eoc}\n" :
-		"{green}%s:{eoc}\n"), p);
-	while ((f = readdir(d)))
-		if (!(fs = insert(fs, filestat(ft_strdup(f->d_name), np), o)))
-			return ((void)closedir(d));
-	display(filter(fs, o), o, np);
-	recurs(fs, np, o);
-	free(np);
-	closedir(d);
+		ft_printf(r == 1 ? "%s:\n" : "\n%s:\n", tmp);
+	i = 0;
+	if ((dirs = parse(dir, tmp, o, dirs, files)))
+	{
+		while (dirs[i])
+			ft_ls(dirs[i++], o, 2);
+		freetab(dirs);
+	}
+	free(tmp);
+	closedir(dir);
 }

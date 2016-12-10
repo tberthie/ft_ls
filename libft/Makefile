@@ -87,9 +87,11 @@ $(NAME): $(OBJ) $(PF_OBJ)
 
 srcs/%.o: srcs/%.c
 	@$(CC) $(FLAGS) -I $(INCS) -o $@ -c $<
+	@echo "[$@]"
 
 printf/%.o: printf/%.c
 	@$(CC) $(FLAGS) -I $(INCS) -o $@ -c $<
+	@echo "[$@]"
 
 clean:
 	@rm -f $(OBJ) $(PF_OBJ)

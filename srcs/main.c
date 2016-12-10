@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 17:40:48 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/09 18:33:49 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/10 21:31:12 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-static int		parse(char *s, t_ls *ls)
+static int		parse(char *s, unsigned int *o)
 {
 	if (*s != '-' || !*(s + 1))
 		return (0);
@@ -35,31 +35,74 @@ static int		parse(char *s, t_ls *ls)
 	return (1);
 }
 
+static char		**sort(char **s)
+{
+	int		a;
+	int		b;
+	char	*tmp;
+
+	a = 0;
+	while (s[a])
+	{
+		b = a + 1;
+		while (s[b])
+		{
+			if (ft_strcmp(s[a], s[b]) > 0 && (tmp = s[a]) &&
+			(s[a] = s[b]))
+				s[b] = tmp;
+			b++;
+		}
+		a++;
+	}
+	return (s);
+}
+
+static void		setup(char **s, unsigned int o, t_file **files, t_file **dirs)
+{
+	t_file		*file;
+	int			i;
+	int			e;
+
+	e = 0;
+	while (*s)
+	{
+		if (!(file = getfile("", *s++)))
+			e = 1;
+		else if (S_ISDIR(file->stat.st_mode) || S_ISLNK(file->stat.st_mode))
+		{
+			if (!(dirs = insertfile(dirs, file, o)))
+				return ;
+		}
+		else if (!(files = insertfile(files, file, o)))
+			return ;
+	}
+	output(files, "", o);
+	freetab(files);
+	i = 0;
+	while (dirs[i++])
+		ft_ls(dirs[i - 1], o, (i - 1) || *files ? 2 : e || (dirs[i]));
+	freetab(dirs);
+}
+
 int				main(int ac, char **av)
 {
-	t_ls			*ls;
+	unsigned int	o;
 	int				i;
-	int				r;
+	t_file			**files;
+	t_file			**dirs;
 
-	if (!(ls = malloc(sizeof(t_ls))) || (ls->o = 0) || (ls->max_len = 0))
+	if (!(files = malloc(sizeof(t_file*)))
+	|| !(dirs = malloc(sizeof(t_file*))))
 		return (0);
-	i = 1;
-	while (av[i] && (r = parse(av[i], ls)) && (i += 1) && (ac -= 1))
-		if (r == -1)
+	*files = 0;
+	*dirs = 0;
+	++av;
+	while (*av && (i = parse(*av, &o)) && (av += 1) && (ac -= 1))
+		if (i == -1)
 			return (0);
-
-
-	/*if (ac == 1)
-		ft_ls(".", o, 0);
+	if (ac == 1)
+		ft_ls(getfile("", "."), o, 0);
 	else
-	{
-		r = setup(av, o, 0);
-		i = 0;
-		while (av[i])
-		{
-			ft_ls(av[i], o, (r == 2) || i ? 2 : (r || (!i && av[i + 1])));
-			i++;
-		}
-	}*/
+		setup(sort(av), o, files, dirs);
 	return (0);
 }
