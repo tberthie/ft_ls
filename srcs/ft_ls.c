@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:16:20 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/10 21:43:38 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/10 22:05:16 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <sys/stat.h>
+
+int				init(t_file ***files)
+{
+	if (!(*files = malloc(sizeof(t_file))))
+		return (0);
+	**files = 0;
+	return (1);
+}
 
 void			freetab(t_file **files)
 {
@@ -39,56 +47,46 @@ int				forbidden(char *n, unsigned int o)
 	return (0);
 }
 
-t_file			**parse(DIR *dir, char *p, unsigned int o, t_file **dirs,
-						t_file **files)
+t_file			**parse(DIR *dir, char *p, unsigned int o)
 {
+	t_file			**fs;
+	t_file			**ds;
 	t_file			*file;
 	struct dirent	*read;
-	char			*tmp;
 
+	if (!init(&fs) || !init(&ds))
+		return (0);
 	while ((read = readdir(dir)))
-	{
-		if ((tmp = ft_strjoin(p, "/")) &&
-		(file = getfile(tmp, read->d_name)))
+		if ((file = getfile(ft_strjoin(p, "/"), read->d_name)))
 		{
 			if (read->d_type == DT_DIR && (o & RR))
 			{
-				if (!forbidden(read->d_name, o) &&
-				!(dirs = insertfile(dirs, file, o)))
+				if (!forbidden(read->d_name, o) && !(ds = insert(ds, file, o)))
 					return (0);
 			}
 			else if ((*read->d_name != '.' || o & A) &&
-			!(files = insertfile(files, file, o)))
+			!(fs = insert(fs, file, o)))
 				return (0);
 		}
-		if (tmp)
-			free(tmp);
-	}
-	output(files, p, o);
-	freetab(files);
-	return (dirs);
+	output(fs, p, o);
+	freetab(fs);
+	return (ds);
 }
 
 void			ft_ls(t_file *d, unsigned int o, int r)
 {
+	t_file			**dirs;
 	DIR				*dir;
 	char			*tmp;
-	t_file			**files;
-	t_file			**dirs;
 	int				i;
 
-	if (!(files = malloc(sizeof(t_file*))) ||
-	!(dirs = malloc(sizeof(t_file*))))
-		return ;
-	*files = 0;
-	*dirs = 0;
 	if (!(tmp = *(d->path) ? ft_strjoin(d->path, d->name) : d->name)
 	|| !(dir = opendir(tmp)))
 		return (tmp) ? (void)free_ret(tmp, 0) : (void)0;
 	if (r)
 		ft_printf(r == 1 ? "%s:\n" : "\n%s:\n", tmp);
 	i = 0;
-	if ((dirs = parse(dir, tmp, o, dirs, files)))
+	if ((dirs = parse(dir, tmp, o)))
 	{
 		while (dirs[i])
 			ft_ls(dirs[i++], o, 2);

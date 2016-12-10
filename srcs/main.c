@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 17:40:48 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/10 21:31:12 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/10 22:05:12 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,17 +70,17 @@ static void		setup(char **s, unsigned int o, t_file **files, t_file **dirs)
 			e = 1;
 		else if (S_ISDIR(file->stat.st_mode) || S_ISLNK(file->stat.st_mode))
 		{
-			if (!(dirs = insertfile(dirs, file, o)))
+			if (!(dirs = insert(dirs, file, o)))
 				return ;
 		}
-		else if (!(files = insertfile(files, file, o)))
+		else if (!(files = insert(files, file, o)))
 			return ;
 	}
 	output(files, "", o);
-	freetab(files);
 	i = 0;
 	while (dirs[i++])
 		ft_ls(dirs[i - 1], o, (i - 1) || *files ? 2 : e || (dirs[i]));
+	freetab(files);
 	freetab(dirs);
 }
 
@@ -91,11 +91,8 @@ int				main(int ac, char **av)
 	t_file			**files;
 	t_file			**dirs;
 
-	if (!(files = malloc(sizeof(t_file*)))
-	|| !(dirs = malloc(sizeof(t_file*))))
+	if (!init(&files) || !init(&dirs))
 		return (0);
-	*files = 0;
-	*dirs = 0;
 	++av;
 	while (*av && (i = parse(*av, &o)) && (av += 1) && (ac -= 1))
 		if (i == -1)

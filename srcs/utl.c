@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:14:52 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/10 21:40:55 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/10 22:02:03 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_file			*getfile(char *p, char *n)
 	return (file);
 }
 
-t_file			**insertfile(t_file **files, t_file *file, unsigned int o)
+t_file			**insert(t_file **files, t_file *file, unsigned int o)
 {
 	t_file		**nfiles;
 	int			i;
