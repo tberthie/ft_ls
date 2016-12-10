@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:14:52 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/10 22:02:03 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/10 22:42:27 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,11 @@ t_file			*getfile(char *p, char *n)
 	if ((!(file = malloc(sizeof(t_file)))
 	|| !(tmp = ft_strjoin(p, n))
 	|| lstat(tmp, &stat)) && error_ret(tmp, 1))
+	{
+		file ? free(file) : 0;
+		tmp ? free(tmp) : 0;
 		return (0);
+	}
 	file->path = ft_strdup(p);
 	file->name = ft_strdup(n);
 	file->stat = stat;

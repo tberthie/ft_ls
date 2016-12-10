@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:16:20 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/10 22:05:16 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/10 22:41:34 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,12 @@ t_file			**parse(DIR *dir, char *p, unsigned int o)
 	t_file			**ds;
 	t_file			*file;
 	struct dirent	*read;
+	char			*tmp;
 
-	if (!init(&fs) || !init(&ds))
+	if (!init(&fs) || !init(&ds) || !(tmp = ft_strjoin(p, "/")))
 		return (0);
 	while ((read = readdir(dir)))
-		if ((file = getfile(ft_strjoin(p, "/"), read->d_name)))
+		if ((file = getfile(tmp, read->d_name)))
 		{
 			if (read->d_type == DT_DIR && (o & RR))
 			{
@@ -68,6 +69,7 @@ t_file			**parse(DIR *dir, char *p, unsigned int o)
 			!(fs = insert(fs, file, o)))
 				return (0);
 		}
+	free(tmp);
 	output(fs, p, o);
 	freetab(fs);
 	return (ds);
@@ -80,14 +82,14 @@ void			ft_ls(t_file *d, unsigned int o, int r)
 	char			*tmp;
 	int				i;
 
-	if (!(tmp = *(d->path) ? ft_strjoin(d->path, d->name) : d->name)
+	if (!(tmp = *(d->path) ? ft_strjoin(d->path, d->name) : ft_strdup(d->name))
 	|| !(dir = opendir(tmp)))
 		return (tmp) ? (void)free_ret(tmp, 0) : (void)0;
 	if (r)
 		ft_printf(r == 1 ? "%s:\n" : "\n%s:\n", tmp);
-	i = 0;
 	if ((dirs = parse(dir, tmp, o)))
 	{
+		i = 0;
 		while (dirs[i])
 			ft_ls(dirs[i++], o, 2);
 		freetab(dirs);
