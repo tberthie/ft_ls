@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/10 13:40:18 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/10 20:57:05 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/11 16:43:29 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,10 @@ void		setcolor(t_file *file)
 		ft_printf("{magenta}");
 }
 
-void		noutput(t_file **files)
-{
-
-}
-
-void		output(t_file **files, char *p, unsigned int o)
+void		output(t_file **files, unsigned int o)
 {
 //	if (o & L)
-//		loutput(files, p);
+//		loutput(files);
 //	else
-//		noutput(files);
+
 }

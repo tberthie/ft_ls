@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/04 16:07:47 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/10 22:01:56 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/11 16:29:10 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,15 @@ typedef struct		s_file
 }					t_file;
 
 void				ft_ls(t_file *d, unsigned int o, int r);
-void				output(t_file **files, char *p, unsigned int o);
-void				loutput(t_file **files, char *p);
+void				output(t_file **files, unsigned int o);
+void				loutput(t_file **files);
 
 t_file				*getfile(char *p, char *n);
 t_file				**insert(t_file **files, t_file *file, unsigned int o);
 
+int					cmp(t_file *a, t_file *b, unsigned int o);
 void				freetab(t_file **files);
+void				freefile(t_file *file);
 int					error_ret(char *s, int n);
 int					free_ret(void *p, int n);
 int					init(t_file ***files);

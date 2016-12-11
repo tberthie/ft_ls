@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 17:40:48 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/10 22:39:16 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/11 16:30:18 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static void		setup(char **s, unsigned int o, t_file **files, t_file **dirs)
 		else if (!(files = insert(files, file, o)))
 			return ;
 	}
-	output(files, "", o);
+	output(files, o);
 	i = 0;
 	while (dirs[i++])
 		ft_ls(dirs[i - 1], o, (i - 1) || *files ? 2 : e || (dirs[i]));

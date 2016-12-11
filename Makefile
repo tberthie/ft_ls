@@ -1,6 +1,7 @@
 SRCS = main.c \
 	   ft_ls.c \
 	   utl.c \
+	   files.c \
 	   output.c \
 	   loutput.c
 
