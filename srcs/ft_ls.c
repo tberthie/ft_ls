@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:16:20 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/11 16:30:34 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/12 16:18:14 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,20 @@ t_file			**parse(DIR *dir, char *p, unsigned int o)
 	while ((read = readdir(dir)))
 	{
 		if (read->d_type == DT_DIR && (o & RR))
+		{
 			!forbidden(read->d_name, o) && (file = getfile(tmp, read->d_name))
 			? (ds = insert(ds, file, o)) : 0;
+			!forbidden(read->d_name, o) && (file = getfile(tmp, read->d_name))
+			? (fs = insert(fs, file, o)) : 0;
+		}
 		else if (*read->d_name != '.' || o & A)
 			(file = getfile(tmp, read->d_name)) ?
 			(fs = insert(fs, file, o)) : 0;
 		if (!fs || !ds)
 			return (0);
 	}
-	output(fs, o);
+	closedir(dir);
+	output(fs, o, 1);
 	free(tmp);
 	freetab(fs);
 	return (ds);
@@ -74,7 +79,7 @@ void			ft_ls(t_file *d, unsigned int o, int r)
 	|| !(dir = opendir(tmp)))
 		return (tmp) ? (void)free_ret(tmp, 0) : (void)0;
 	if (r)
-		ft_printf(r == 1 ? "%s:\n" : "\n%s:\n", tmp);
+		ft_printf(r == 1 ? "{green}%s:{eoc}\n" : "\n{green}%s:{eoc}\n", tmp);
 	if ((dirs = parse(dir, tmp, o)))
 	{
 		i = 0;
@@ -82,6 +87,7 @@ void			ft_ls(t_file *d, unsigned int o, int r)
 			ft_ls(dirs[i++], o, 2);
 		freetab(dirs);
 	}
+	else
+		closedir(dir);
 	free(tmp);
-	closedir(dir);
 }

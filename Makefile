@@ -3,7 +3,7 @@ SRCS = main.c \
 	   utl.c \
 	   files.c \
 	   output.c \
-	   loutput.c
+	   print.c \
 
 OBJS = $(addprefix srcs/,$(SRCS:.c=.o))
 

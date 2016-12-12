@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:14:52 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/11 16:03:33 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/12 16:08:12 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,33 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <time.h>
+
+char			*get_date(void)
+{
+	time_t	tm;
+	char	*cs;
+	char	*tmp;
+
+	tm = time(&tm);
+	tmp = ctime(&tm);
+	cs = ft_strdup(tmp);
+	return (cs);
+}
+
+void			setcolor(t_file *file)
+{
+	if (S_ISDIR(file->stat.st_mode))
+		write(1, "\x1b[32m", 6);
+	else if (S_ISLNK(file->stat.st_mode))
+		write(1, "\x1b[35m", 6);
+	else if (S_ISLNK(file->stat.st_mode) || S_ISBLK(file->stat.st_mode) ||
+	S_ISCHR(file->stat.st_mode) || S_ISSOCK(file->stat.st_mode))
+		write(1, "\x1b[36m", 6);
+	else if (S_IXUSR & file->stat.st_mode || S_IXGRP & file->stat.st_mode
+	|| S_IXOTH & file->stat.st_mode)
+		write(1, "\x1b[31m", 6);
+}
 
 int				cmp(t_file *a, t_file *b, unsigned int o)
 {

@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 17:40:48 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/11 16:30:18 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/12 14:11:22 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ static void		setup(char **s, unsigned int o, t_file **files, t_file **dirs)
 	{
 		if (!(file = getfile("", *s++)))
 			e = 1;
-		else if (S_ISDIR(file->stat.st_mode) || S_ISLNK(file->stat.st_mode))
+		else if (S_ISDIR(file->stat.st_mode) || (S_ISLNK(file->stat.st_mode) &&
+		!(o & L)))
 		{
 			if (!(dirs = insert(dirs, file, o)))
 				return ;
@@ -76,7 +77,7 @@ static void		setup(char **s, unsigned int o, t_file **files, t_file **dirs)
 		else if (!(files = insert(files, file, o)))
 			return ;
 	}
-	output(files, o);
+	output(files, o, 0);
 	i = 0;
 	while (dirs[i++])
 		ft_ls(dirs[i - 1], o, (i - 1) || *files ? 2 : e || (dirs[i]));
