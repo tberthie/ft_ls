@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/04 16:07:47 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/12 16:05:03 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/12 16:56:56 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@
 # define A	(1 << 2)
 # define R	(1 << 3)
 # define T	(1 << 4)
+# define U	(1 << 5)
+# define F	(1 << 6)
+# define G	(1 << 7)
+# define D	(1 << 8)
 
 typedef struct stat	t_s;
 
@@ -33,7 +37,7 @@ typedef struct		s_file
 
 void				ft_ls(t_file *d, unsigned int o, int r);
 void				output(t_file **files, unsigned int o, int root);
-void				loutput(t_file **files, int root);
+void				loutput(t_file **files, int root, unsigned int o);
 
 t_file				*getfile(char *p, char *n);
 t_file				**insert(t_file **files, t_file *file, unsigned int o);

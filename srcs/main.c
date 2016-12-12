@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 17:40:48 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/12 14:11:22 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/12 17:00:50 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,15 @@ static int		parse(char *s, unsigned int *o)
 		return (0);
 	s++;
 	while ((*s == 'l' && (*o |= L)) || (*s == 'R' && (*o |= RR)) || (*s == 'a'
-	&& (*o |= A)) || (*s == 'r' && (*o |= R)) || (*s == 't' && (*o |= T)))
+	&& (*o |= A)) || (*s == 'r' && (*o |= R)) || (*s == 't' && (*o |= T)) ||
+	(*s == 'u' && (*o |= U)) || (*s == 'f' && (*o |= F) && (*o |= A)) ||
+	(*s == 'g' && (*o |= G) && (*o |= L)) || (*s == 'd' && (*o |= D)))
 		++s;
 	if (*s)
 	{
 		write(2, "ft_ls: illegal option -- ", 25);
 		write(2, s, 1);
-		write(2, "\nusage: ft_ls [-lRart] [file ...]\n", 34);
+		write(2, "\nusage: ft_ls [-lRartufgd] [file ...]\n", 38);
 		return (-1);
 	}
 	return (1);
@@ -68,8 +70,8 @@ static void		setup(char **s, unsigned int o, t_file **files, t_file **dirs)
 	{
 		if (!(file = getfile("", *s++)))
 			e = 1;
-		else if (S_ISDIR(file->stat.st_mode) || (S_ISLNK(file->stat.st_mode) &&
-		!(o & L)))
+		else if (!(o & D) && (S_ISDIR(file->stat.st_mode) || (S_ISLNK(file->stat.st_mode) &&
+		!(o & L))))
 		{
 			if (!(dirs = insert(dirs, file, o)))
 				return ;
@@ -99,8 +101,9 @@ int				main(int ac, char **av)
 		if (i == -1)
 			return (0);
 	if (ac == 1)
-		ft_ls(getfile("", "."), o, 0);
+		!(o & D) ? ft_ls(getfile("", "."), o, 0) :
+		output(insert(files, getfile("", "."), o), o, 0);
 	else
-		setup(sort(av), o, files, dirs);
+		setup(o & F ? av : sort(av), o, files, dirs);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:16:20 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/12 16:18:14 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/12 16:58:18 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,28 +42,24 @@ t_file			**parse(DIR *dir, char *p, unsigned int o)
 	t_file			**ds;
 	t_file			*file;
 	struct dirent	*read;
-	char			*tmp;
 
-	if (!init(&fs) || !init(&ds) || !(tmp = ft_strjoin(p, "/")))
+	if (!init(&fs) || !init(&ds) || !(p = ft_strjoin(p, "/")))
 		return (0);
-	while ((read = readdir(dir)))
-	{
-		if (read->d_type == DT_DIR && (o & RR))
+	while ((read = readdir(dir)) && fs && ds)
+		if (read->d_type == DT_DIR && (o & RR) && !(o & D))
 		{
-			!forbidden(read->d_name, o) && (file = getfile(tmp, read->d_name))
+			!forbidden(read->d_name, o) && (file = getfile(p, read->d_name))
 			? (ds = insert(ds, file, o)) : 0;
-			!forbidden(read->d_name, o) && (file = getfile(tmp, read->d_name))
+			!forbidden(read->d_name, o) && (file = getfile(p, read->d_name))
 			? (fs = insert(fs, file, o)) : 0;
 		}
 		else if (*read->d_name != '.' || o & A)
-			(file = getfile(tmp, read->d_name)) ?
+			(file = getfile(p, read->d_name)) ?
 			(fs = insert(fs, file, o)) : 0;
-		if (!fs || !ds)
-			return (0);
-	}
-	closedir(dir);
+	if (!fs || !ds)
+		return (0);
+	free(p);
 	output(fs, o, 1);
-	free(tmp);
 	freetab(fs);
 	return (ds);
 }
@@ -87,7 +83,6 @@ void			ft_ls(t_file *d, unsigned int o, int r)
 			ft_ls(dirs[i++], o, 2);
 		freetab(dirs);
 	}
-	else
-		closedir(dir);
+	closedir(dir);
 	free(tmp);
 }

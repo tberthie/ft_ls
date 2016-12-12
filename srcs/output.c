@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/10 13:40:18 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/12 16:19:32 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/12 16:55:43 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <pwd.h>
 #include <grp.h>
 
-void		loutput(t_file **files, int root)
+void		loutput(t_file **files, int root, unsigned int o)
 {
 	int		max[4];
 	char	*cs;
@@ -31,10 +31,11 @@ void		loutput(t_file **files, int root)
 	while (*files)
 	{
 		print_rights(*files);
-		ft_printf("  %*d %-*s  %-*s  %*d ", max[0], (*files)->stat.st_nlink,
-		max[1], getpwuid((*files)->stat.st_uid)->pw_name, max[2],
-		getgrgid((*files)->stat.st_gid)->gr_name, max[3],
-		(*files)->stat.st_size);
+		ft_printf("  %*d", max[0], (*files)->stat.st_nlink);
+		ft_printf((o & G) ? "" : " %-*s ",
+		max[1], getpwuid((*files)->stat.st_uid)->pw_name);
+		ft_printf(" %-*s  ", max[2], getgrgid((*files)->stat.st_gid)->gr_name);
+		ft_printf("%*d ", max[3], (*files)->stat.st_size);
 		print_date(*files, cs);
 		setcolor((*files));
 		ft_printf(" %s{eoc}", (*files)->name);
@@ -45,25 +46,33 @@ void		loutput(t_file **files, int root)
 	free(cs);
 }
 
+static void	format(t_file **files, int tabs, int num, int cols)
+{
+	while (*files)
+	{
+		setcolor(*files);
+		ft_printf("%s{eoc}\n", (*files++)->name);
+	}
+}
+
 void		output(t_file **files, unsigned int o, int root)
 {
 	struct winsize	win;
 	int				max;
-	int				size;
+	int				num;
 	int				len;
 
 	if (!*files)
 		return ;
 	if (o & L)
-		return (loutput(files, root));
-/*	ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
-	size = 0;
+		return (loutput(files, root, o));
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
+	num = 0;
 	max = 0;
-	while (files[size])
+	while (files[num])
 	{
 		max =
-		(len = ft_strlen(files[size++]->name)) > max ? len : max;
+		(len = ft_strlen(files[num++]->name)) > max ? len : max;
 	}
-	if (size)
-		format(files, (max / 8) + 1, size, win);*/
+	format(files, (max / 8) + 1, num, win.ws_col);
 }

@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:14:52 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/12 16:08:12 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/12 16:49:02 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,16 @@ void			setcolor(t_file *file)
 
 int				cmp(t_file *a, t_file *b, unsigned int o)
 {
-	if ((o & T) && (o & R))
-		return (a->stat.st_mtime > b->stat.st_mtime ? 1 : 0);
-	if (o & T)
-		return (a->stat.st_mtime <= b->stat.st_mtime ? 1 : 0);
+	if (o & F)
+		return (1);
+	if ((o & T))
+	{
+		if (o & U)
+			return (o & R ? (a->stat.st_atime > b->stat.st_atime) : 
+			(a->stat.st_atime <= b->stat.st_atime));
+		return (o & R ? (a->stat.st_mtime > b->stat.st_mtime) : 
+		(a->stat.st_mtime <= b->stat.st_mtime));
+	}
 	if (o & R)
 		return (ft_strcmp(a->name, b->name) <= 0) ? 1 : 0;
 	return (ft_strcmp(a->name, b->name) > 0) ? 1 : 0;
