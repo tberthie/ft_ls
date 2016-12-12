@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/10 13:40:18 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/12 16:55:43 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/12 18:53:32 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,38 @@ void		loutput(t_file **files, int root, unsigned int o)
 	free(cs);
 }
 
-static void	format(t_file **files, int tabs, int num, int cols)
+static void	format_alt(t_file **files)
 {
 	while (*files)
+		ft_printf("%s\n", (*files++)->name);
+}
+
+static void	format(t_file **files, int total, int num, int max)
+{
+	int		rows;
+	t_file	*file;
+	int		pos;
+	int		len;
+	int		i;
+
+	rows = num / total + (num % total ? 1 : 0);
+	total *= rows;
+	i = 0;
+	while (i < total)
 	{
-		setcolor(*files);
-		ft_printf("%s{eoc}\n", (*files++)->name);
+		pos = (i * rows) - total * (i * rows / total) + (i * rows / total);
+		if ((i += 1) && pos < num)
+		{
+			setcolor((file = files[pos]));
+			if (pos >= num - rows)
+				ft_printf("%s{eoc}\n", file->name);
+			else if ((len = ft_strlen(file->name)))
+			{
+				ft_printf("%s{eoc}\t", file->name);
+				while (len - (len % 8) < max - (max % 8) && (len += 8))
+					write(1, "\t", 1);
+			}
+		}
 	}
 }
 
@@ -74,5 +100,6 @@ void		output(t_file **files, unsigned int o, int root)
 		max =
 		(len = ft_strlen(files[num++]->name)) > max ? len : max;
 	}
-	format(files, (max / 8) + 1, num, win.ws_col);
+	(win.ws_col) ? format(files, win.ws_col / (8 + (max - (max % 8))), num,
+	max) : format_alt(files);
 }

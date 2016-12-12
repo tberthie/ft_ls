@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 17:40:48 by tberthie          #+#    #+#             */
-/*   Updated: 2016/12/12 17:00:50 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/12 17:07:47 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int		parse(char *s, unsigned int *o)
 	{
 		write(2, "ft_ls: illegal option -- ", 25);
 		write(2, s, 1);
-		write(2, "\nusage: ft_ls [-lRartufgd] [file ...]\n", 38);
+		write(2, "\nusage: ft_ls [-Radfglrtu] [file ...]\n", 38);
 		return (-1);
 	}
 	return (1);
@@ -70,8 +70,8 @@ static void		setup(char **s, unsigned int o, t_file **files, t_file **dirs)
 	{
 		if (!(file = getfile("", *s++)))
 			e = 1;
-		else if (!(o & D) && (S_ISDIR(file->stat.st_mode) || (S_ISLNK(file->stat.st_mode) &&
-		!(o & L))))
+		else if (!(o & D) && (S_ISDIR(file->stat.st_mode) ||
+		(S_ISLNK(file->stat.st_mode) && !(o & L))))
 		{
 			if (!(dirs = insert(dirs, file, o)))
 				return ;
