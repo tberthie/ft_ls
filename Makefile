@@ -9,7 +9,7 @@ OBJS = $(addprefix srcs/,$(SRCS:.c=.o))
 
 NAME = ft_ls
 CC = gcc
-FLAGS = -Wall -Wextra
+FLAGS = -Wall -Wextra -Werror
 INCS = includes -I libft
 
 all: $(NAME)
