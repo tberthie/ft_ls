@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 17:40:48 by tberthie          #+#    #+#             */
-/*   Updated: 2017/01/09 21:08:05 by tberthie         ###   ########.fr       */
+/*   Updated: 2017/01/25 14:00:28 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int				main(int ac, char **av)
 	t_file			**files;
 	t_file			**dirs;
 
+	o = 0;
 	if (!init(&files) || !init(&dirs))
 		return (0);
 	++av;
@@ -108,6 +109,5 @@ int				main(int ac, char **av)
 		output(insert(files, getfile("", "."), o), o, 0);
 	else
 		setup(o & F ? av : sort(av), o, files, dirs);
-	ft_printf("{green}[42]{eoc}\n");
 	return (0);
 }
