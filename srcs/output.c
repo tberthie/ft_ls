@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/10 13:40:18 by tberthie          #+#    #+#             */
-/*   Updated: 2017/01/25 15:20:06 by tberthie         ###   ########.fr       */
+/*   Updated: 2017/05/22 13:39:15 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,6 @@ void		output(t_file **files, unsigned int o, int root)
 		max =
 		(len = ft_strlen(files[num++]->name)) > max ? len : max;
 	}
-	(win.ws_col) ? format(files, win.ws_col / (8 + (max - (max % 8))), num,
-	max) : format_alt(files);
+	(win.ws_col) && max < win.ws_col ? format(files, win.ws_col /
+	(8 + (max - (max % 8))), num, max) : format_alt(files);
 }
