@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/05 12:16:20 by tberthie          #+#    #+#             */
-/*   Updated: 2017/03/09 12:51:42 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/12 18:00:29 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void			ft_ls(t_file *d, unsigned int o, int r)
 
 	if (!(tmp = ft_strjoin(d->path, d->name))
 	|| !(dir = opendir(tmp)))
-		return (tmp) ? (void)free_ret(tmp, 0) : (void)error_ret(tmp, 0);
+		return (tmp) ? (void)free_ret(tmp, 0) : (void)0;
 	if (r)
 		ft_printf(r == 1 ? "{green}%s:{eoc}\n" : "\n{green}%s:{eoc}\n", tmp);
 	if ((dirs = parse(dir, tmp, o)))

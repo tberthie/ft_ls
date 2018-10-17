@@ -6,7 +6,7 @@
 /*   By: tberthie <tberthie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 17:40:48 by tberthie          #+#    #+#             */
-/*   Updated: 2017/03/09 12:53:01 by tberthie         ###   ########.fr       */
+/*   Updated: 2016/12/12 17:07:47 by tberthie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,7 @@ static void		setup(char **s, unsigned int o, t_file **files, t_file **dirs)
 	while (*s)
 	{
 		if (!(file = getfile("", *s++)))
-		{
-			error_ret(*(s - 1), 0);
 			e = 1;
-		}
 		else if (!(o & D) && (S_ISDIR(file->stat.st_mode) ||
 		(S_ISLNK(file->stat.st_mode) && !(o & L))))
 		{
@@ -97,7 +94,6 @@ int				main(int ac, char **av)
 	t_file			**files;
 	t_file			**dirs;
 
-	o = 0;
 	if (!init(&files) || !init(&dirs))
 		return (0);
 	++av;
